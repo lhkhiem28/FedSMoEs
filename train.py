@@ -12,12 +12,12 @@ import torch.nn as nn
 import torch.optim as optim
 
 from data_utils import get_lm_corpus
-from mem_transformer import MemTransformerLM
+from data_transformer import MemTransformerLM
 from utils.exp_utils import create_exp_dir
 from utils.data_parallel import BalancedDataParallel
 
 parser = argparse.ArgumentParser(description='PyTorch Transformer Language Model')
-parser.add_argument('--data', type=str, default='../data/wikitext-103',
+parser.add_argument('--data', type=str, default='data/wikitext-103',
                     help='location of the data corpus')
 parser.add_argument('--dataset', type=str, default='wt103',
                     choices=['wt103', 'lm1b', 'enwik8', 'text8'],
@@ -104,7 +104,7 @@ parser.add_argument('--log-interval', type=int, default=200,
                     help='report interval')
 parser.add_argument('--eval-interval', type=int, default=4000,
                     help='evaluation interval')
-parser.add_argument('--work_dir', default='LM-TFM', type=str,
+parser.add_argument('--work_dir', default='exps', type=str,
                     help='experiment directory.')
 parser.add_argument('--restart', action='store_true',
                     help='restart training from the saved checkpoint')
@@ -160,7 +160,7 @@ assert args.batch_size % args.batch_chunk == 0
 args.work_dir = '{}-{}'.format(args.work_dir, args.dataset)
 args.work_dir = os.path.join(args.work_dir, time.strftime('%Y%m%d-%H%M%S'))
 logging = create_exp_dir(args.work_dir,
-    scripts_to_save=['train.py', 'mem_transformer.py'], debug=args.debug)
+    scripts_to_save=['train.py', 'data_transformer.py'], debug=args.debug)
 
 # Set the random seed manually for reproducibility.
 np.random.seed(args.seed)
@@ -422,7 +422,6 @@ def evaluate(eval_iter):
     model.train()
 
     return total_loss / total_len
-
 
 def train():
     # Turn on training mode which enables dropout.

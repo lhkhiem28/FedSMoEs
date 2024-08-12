@@ -1,8 +1,4 @@
-import sys
-import math
-import functools
-
-import numpy as np
+import os, sys
 
 import torch
 import torch.nn as nn
@@ -29,7 +25,6 @@ class PositionalEmbedding(nn.Module):
             return pos_emb[:,None,:].expand(-1, bsz, -1)
         else:
             return pos_emb[:,None,:]
-
 
 class PositionwiseFF(nn.Module):
     def __init__(self, d_model, d_inner, dropout, pre_lnorm=False):
@@ -481,7 +476,6 @@ class RelPartialLearnableDecoderLayer(nn.Module):
         output = self.pos_ff(output)
 
         return output
-
 
 class AdaptiveEmbedding(nn.Module):
     def __init__(self, n_token, d_embed, d_proj, cutoffs, div_val=1,

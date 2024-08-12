@@ -3,15 +3,15 @@ import argparse
 import time
 import math
 import os, sys
+import itertools
 
 import torch
 
 from data_utils import get_lm_corpus
-from mem_transformer import MemTransformerLM
 from utils.exp_utils import get_logger
 
 parser = argparse.ArgumentParser(description='PyTorch Transformer Language Model')
-parser.add_argument('--data', type=str, default='../data/wikitext-103',
+parser.add_argument('--data', type=str, default='data/wikitext-103',
                     help='location of the data corpus')
 parser.add_argument('--dataset', type=str, default='wt103',
                     choices=['wt103', 'lm1b', 'enwik8', 'text8'],

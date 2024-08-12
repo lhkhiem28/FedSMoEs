@@ -1,7 +1,6 @@
 import os, sys
 import glob
 
-from collections import Counter, OrderedDict
 import numpy as np
 import torch
 
@@ -60,7 +59,6 @@ class LMOrderedIterator(object):
 
     def __iter__(self):
         return self.get_fixlen_iter()
-
 
 class LMShuffledIterator(object):
     def __init__(self, data, bsz, bptt, device='cpu', ext_len=None, shuffle=False):
@@ -141,7 +139,6 @@ class LMShuffledIterator(object):
         for batch in self.stream_iterator(sent_stream):
             yield batch
 
-
 class LMMultiFileIterator(LMShuffledIterator):
     def __init__(self, paths, vocab, bsz, bptt, device='cpu', ext_len=None,
         shuffle=False):
@@ -173,7 +170,6 @@ class LMMultiFileIterator(LMShuffledIterator):
             sent_stream = self.get_sent_stream(path)
             for batch in self.stream_iterator(sent_stream):
                 yield batch
-
 
 class Corpus(object):
     def __init__(self, path, dataset, *args, **kwargs):
@@ -232,7 +228,6 @@ class Corpus(object):
 
         return data_iter
 
-
 def get_lm_corpus(datadir, dataset):
     fn = os.path.join(datadir, 'cache.pt')
     if os.path.exists(fn):
@@ -262,7 +257,7 @@ def get_lm_corpus(datadir, dataset):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description='unit test')
-    parser.add_argument('--datadir', type=str, default='../data/text8',
+    parser.add_argument('--datadir', type=str, default='data/text8',
                         help='location of the data corpus')
     parser.add_argument('--dataset', type=str, default='text8',
                         choices=['ptb', 'wt2', 'wt103', 'lm1b', 'enwik8', 'text8'],

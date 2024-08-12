@@ -1,7 +1,8 @@
 import os
-from collections import Counter, OrderedDict
 
 import torch
+
+from collections import Counter, OrderedDict
 
 class Vocab(object):
     def __init__(self, special=[], min_freq=0, max_size=None, lower_case=True,

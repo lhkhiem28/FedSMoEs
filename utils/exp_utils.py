@@ -1,10 +1,7 @@
-import functools
 import os, shutil
-
-import numpy as np
+import functools
 
 import torch
-
 
 def logging(s, log_path, print_=True, log_=True):
     if print_:
