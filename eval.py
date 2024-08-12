@@ -87,7 +87,7 @@ def evaluate(eval_iter):
             total_loss += seq_len * loss.item()
             total_len += seq_len
         total_time = time.time() - start_time
-    logging('Time : {:.2f}s, {:.2f}ms/segment'.format(
+    logging('Time : {:>.2f}s, {:>.2f}ms/segment'.format(
             total_time, 1000 * total_time / (idx+1)))
     return total_loss / total_len
 

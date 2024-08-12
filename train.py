@@ -102,7 +102,7 @@ parser.add_argument('--multi_gpu', action='store_true',
                     help='use multiple GPU')
 parser.add_argument('--log-interval', type=int, default=200,
                     help='report interval')
-parser.add_argument('--eval-interval', type=int, default=4000,
+parser.add_argument('--eval-interval', type=int, default=20000,
                     help='evaluation interval')
 parser.add_argument('--work_dir', default='exps', type=str,
                     help='experiment directory.')
@@ -487,14 +487,14 @@ def train():
         if train_step % args.log_interval == 0:
             cur_loss = train_loss / args.log_interval
             elapsed = time.time() - log_start_time
-            log_str = '| epoch {:3d} step {:>8d} | {:>6d} batches | lr {:.3g} ' \
-                      '| ms/batch {:5.2f} | loss {:5.2f}'.format(
+            log_str = '| epoch {:>3d} step {:>8d} | {:>6d} batches | lr {:>.3g} ' \
+                      '| ms/batch {:>5.2f} | loss {:>5.2f}'.format(
                 epoch, train_step, batch+1, optimizer.param_groups[0]['lr'],
                 elapsed * 1000 / args.log_interval, cur_loss)
             if args.dataset in ['enwik8', 'text8']:
-                log_str += ' | bpc {:9.5f}'.format(cur_loss / math.log(2))
+                log_str += ' | bpc {:>9.4f}'.format(cur_loss / math.log(2))
             else:
-                log_str += ' | ppl {:9.3f}'.format(math.exp(cur_loss))
+                log_str += ' | ppl {:>9.4f}'.format(math.exp(cur_loss))
             logging(log_str)
             train_loss = 0
             log_start_time = time.time()
@@ -502,14 +502,14 @@ def train():
         if train_step % args.eval_interval == 0:
             val_loss = evaluate(va_iter)
             logging('-' * 100)
-            log_str = '| Eval {:3d} at step {:>8d} | time: {:5.2f}s ' \
-                      '| valid loss {:5.2f}'.format(
+            log_str = '| Eval {:>3d} at step {:>8d} | time: {:>5.2f}s ' \
+                      '| valid loss {:>5.2f}'.format(
                 train_step // args.eval_interval, train_step,
                 (time.time() - eval_start_time), val_loss)
             if args.dataset in ['enwik8', 'text8']:
-                log_str += ' | bpc {:9.5f}'.format(val_loss / math.log(2))
+                log_str += ' | bpc {:>9.4f}'.format(val_loss / math.log(2))
             else:
-                log_str += ' | valid ppl {:9.3f}'.format(math.exp(val_loss))
+                log_str += ' | valid ppl {:>9.4f}'.format(math.exp(val_loss))
             logging(log_str)
             logging('-' * 100)
             # Save the model if the validation loss is the best we've seen so far.
@@ -529,7 +529,7 @@ def train():
 
             eval_start_time = time.time()
 
-        if train_step == args.max_step:
+        if train_step == args.max_step + 1:
             break
 
 # Loop over epochs.
@@ -544,7 +544,7 @@ eval_start_time = time.time()
 try:
     for epoch in itertools.count(start=1):
         train()
-        if train_step == args.max_step:
+        if train_step == args.max_step + 1:
             logging('-' * 100)
             logging('End of training')
             break
@@ -561,9 +561,9 @@ para_model = model.to(device)
 test_loss = evaluate(te_iter)
 logging('=' * 100)
 if args.dataset in ['enwik8', 'text8']:
-    logging('| End of training | test loss {:5.2f} | test bpc {:9.5f}'.format(
+    logging('| End of training | test loss {:>5.2f} | test bpc {:>9.4f}'.format(
         test_loss, test_loss / math.log(2)))
 else:
-    logging('| End of training | test loss {:5.2f} | test ppl {:9.3f}'.format(
+    logging('| End of training | test loss {:>5.2f} | test ppl {:>9.4f}'.format(
         test_loss, math.exp(test_loss)))
 logging('=' * 100)
