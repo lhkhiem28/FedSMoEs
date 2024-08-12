@@ -487,7 +487,7 @@ def train():
         if train_step % args.log_interval == 0:
             cur_loss = train_loss / args.log_interval
             elapsed = time.time() - log_start_time
-            log_str = '| epoch {:>3d} step {:>8d} | {:>6d} batches | lr {:>.3g} ' \
+            log_str = '| epoch {:>3d} step {:>8d} | {:>6d} batches | lr {:>.6f} ' \
                       '| ms/batch {:>5.2f} | loss {:>5.2f}'.format(
                 epoch, train_step, batch+1, optimizer.param_groups[0]['lr'],
                 elapsed * 1000 / args.log_interval, cur_loss)
