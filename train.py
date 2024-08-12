@@ -22,17 +22,17 @@ parser.add_argument('--data', type=str, default='data/wikitext-103',
 parser.add_argument('--dataset', type=str, default='wt103',
                     choices=['wt103', 'lm1b', 'enwik8', 'text8'],
                     help='dataset name')
-parser.add_argument('--n_layer', type=int, default=12,
+parser.add_argument('--n_layer', type=int, default=4,
                     help='number of total layers')
-parser.add_argument('--n_head', type=int, default=10,
+parser.add_argument('--n_head', type=int, default=8,
                     help='number of heads')
-parser.add_argument('--d_head', type=int, default=50,
+parser.add_argument('--d_head', type=int, default=64,
                     help='head dimension')
 parser.add_argument('--d_embed', type=int, default=-1,
                     help='embedding dimension')
-parser.add_argument('--d_model', type=int, default=500,
+parser.add_argument('--d_model', type=int, default=512,
                     help='model dimension')
-parser.add_argument('--d_inner', type=int, default=1000,
+parser.add_argument('--d_inner', type=int, default=2048,
                     help='inner dimension in FF')
 parser.add_argument('--dropout', type=float, default=0.0,
                     help='global dropout rate')
@@ -157,7 +157,7 @@ if args.d_embed < 0:
 assert args.ext_len >= 0, 'extended context length must be non-negative'
 assert args.batch_size % args.batch_chunk == 0
 
-args.work_dir = '{}-{}'.format(args.work_dir, args.dataset)
+args.work_dir = '{}/{}'.format(args.work_dir, args.dataset)
 args.work_dir = os.path.join(args.work_dir, time.strftime('%Y%m%d-%H%M%S'))
 logging = create_exp_dir(args.work_dir,
     scripts_to_save=['train.py', 'data_transformer.py'], debug=args.debug)
