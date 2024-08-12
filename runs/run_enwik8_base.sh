@@ -16,11 +16,11 @@ if [[ $1 == 'train' ]]; then
         --optim adam \
         --lr 0.00025 \
         --warmup_step 0 \
-        --max_step 200000 \
+        --max_step 400000 \
         --tgt_len 512 \
         --mem_len 512 \
         --eval_tgt_len 128 \
-        --batch_size 44 \
+        --batch_size 22 \
         --multi_gpu \
         --gpu0_bsz 4 \
         ${@:2}
