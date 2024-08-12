@@ -36,7 +36,6 @@ elif [[ $1 == 'eval' ]]; then
         --clamp_len 820 \
         --same_length \
         --split test \
-        --moe --moe-num-expert 16 --moe-top-k 16 \
         ${@:2}
 else
     echo 'unknown argment 1'
