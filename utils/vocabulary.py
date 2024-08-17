@@ -1,8 +1,8 @@
 import os
+from collections import Counter, OrderedDict
 
 import torch
 
-from collections import Counter, OrderedDict
 
 class Vocab(object):
     def __init__(self, special=[], min_freq=0, max_size=None, lower_case=True,
@@ -27,7 +27,7 @@ class Vocab(object):
         else:
             symbols = line.split(self.delimiter)
 
-        if add_double_eos: # lm1b
+        if add_double_eos:  # lm1b
             return ['<S>'] + symbols + ['<S>']
         elif add_eos:
             return symbols + ['<eos>']
@@ -91,7 +91,7 @@ class Vocab(object):
                 len(self), len(self.counter)))
 
     def encode_file(self, path, ordered=False, verbose=False, add_eos=True,
-            add_double_eos=False):
+                    add_double_eos=False):
         if verbose: print('encoding file {} ...'.format(path))
         assert os.path.exists(path)
         encoded = []
@@ -100,7 +100,7 @@ class Vocab(object):
                 if verbose and idx > 0 and idx % 500000 == 0:
                     print('    line {}'.format(idx))
                 symbols = self.tokenize(line, add_eos=add_eos,
-                    add_double_eos=add_double_eos)
+                                        add_double_eos=add_double_eos)
                 encoded.append(self.convert_to_tensor(symbols))
 
         if ordered:

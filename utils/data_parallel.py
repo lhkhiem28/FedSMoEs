@@ -3,12 +3,14 @@ from torch.nn.parallel import DataParallel
 from torch.nn.parallel._functions import Scatter
 from torch.nn.parallel.parallel_apply import parallel_apply
 
+
 def scatter(inputs, target_gpus, chunk_sizes, dim=0):
     r"""
     Slices tensors into approximately equal chunks and
     distributes them across given GPUs. Duplicates
     references to objects that are not tensors.
     """
+
     def scatter_map(obj):
         if isinstance(obj, torch.Tensor):
             try:
@@ -36,6 +38,7 @@ def scatter(inputs, target_gpus, chunk_sizes, dim=0):
     finally:
         scatter_map = None
 
+
 def scatter_kwargs(inputs, kwargs, target_gpus, chunk_sizes, dim=0):
     r"""Scatter with support for kwargs dictionary"""
     inputs = scatter(inputs, target_gpus, chunk_sizes, dim) if inputs else []
@@ -47,6 +50,7 @@ def scatter_kwargs(inputs, kwargs, target_gpus, chunk_sizes, dim=0):
     inputs = tuple(inputs)
     kwargs = tuple(kwargs)
     return inputs, kwargs
+
 
 class BalancedDataParallel(DataParallel):
     def __init__(self, gpu0_bsz, *args, **kwargs):

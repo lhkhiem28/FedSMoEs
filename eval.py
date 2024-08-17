@@ -1,9 +1,8 @@
 # coding: utf-8
 import argparse
-import time
 import math
-import os, sys
-import itertools
+import os
+import time
 
 import torch
 
@@ -51,9 +50,9 @@ corpus = get_lm_corpus(args.data, args.dataset)
 ntokens = len(corpus.vocab)
 
 va_iter = corpus.get_iterator('valid', args.batch_size, args.tgt_len,
-    device=device, ext_len=args.ext_len)
+                              device=device, ext_len=args.ext_len)
 te_iter = corpus.get_iterator('test', args.batch_size, args.tgt_len,
-    device=device, ext_len=args.ext_len)
+                              device=device, ext_len=args.ext_len)
 
 # Load the best saved model.
 with open(os.path.join(args.work_dir, 'model.pt'), 'rb') as f:
@@ -62,13 +61,14 @@ model.backward_compatible()
 model = model.to(device)
 
 logging('Evaluating with bsz {} tgt_len {} ext_len {} mem_len {} clamp_len {}'.format(
-       args.batch_size, args.tgt_len, args.ext_len, args.mem_len, args.clamp_len))
+    args.batch_size, args.tgt_len, args.ext_len, args.mem_len, args.clamp_len))
 
 model.reset_length(args.tgt_len, args.ext_len, args.mem_len)
 if args.clamp_len > 0:
     model.clamp_len = args.clamp_len
 if args.same_length:
     model.same_length = True
+
 
 ###############################################################################
 # Evaluation code
@@ -88,8 +88,9 @@ def evaluate(eval_iter):
             total_len += seq_len
         total_time = time.time() - start_time
     logging('Time : {:>.2f}s, {:>.2f}ms/segment'.format(
-            total_time, 1000 * total_time / (idx+1)))
+        total_time, 1000 * total_time / (idx + 1)))
     return total_loss / total_len
+
 
 # Run on test data.
 if args.split == 'all':
@@ -102,6 +103,7 @@ elif args.split == 'test':
     test_loss = evaluate(te_iter)
     valid_loss = None
 
+
 def format_log(loss, split):
     if args.dataset in ['enwik8', 'text8']:
         log_str = '| {0} loss {1:5.2f} | {0} bpc {2:9.5f} '.format(
@@ -110,6 +112,7 @@ def format_log(loss, split):
         log_str = '| {0} loss {1:5.2f} | {0} ppl {2:9.3f} '.format(
             split, loss, math.exp(loss))
     return log_str
+
 
 log_str = ''
 if valid_loss is not None:
